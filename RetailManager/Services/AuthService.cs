@@ -13,13 +13,13 @@ public class AuthService : IAuthService
     private UserManager<IdentityUser> _userManager;
     private SignInManager<IdentityUser> _signInManager;
 
-    public AuthService(UserManager<IdentityUser> userManager,SignInManager<IdentityUser> signInManager)
+    public AuthService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
     }
 
-    public async Task RegisterUserAsync(RegisterDTO model)
+    public async Task RegisterUserAsync(RegisterDto model)
     {
         var user = new IdentityUser
         {
@@ -35,7 +35,7 @@ public class AuthService : IAuthService
         }
     }
 
-    public async Task<LoginResponse> LoginUserAsync(LoginDTO model)
+    public async Task<LoginResponse> LoginUserAsync(LoginDto model)
     {
         var user = await _userManager.FindByEmailAsync(model.Email);
 
@@ -67,17 +67,17 @@ public class AuthService : IAuthService
 
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Name,user.UserName),
-            new Claim(JwtRegisteredClaimNames.Email,user.Email),
-            new Claim(JwtRegisteredClaimNames.Jti,user.Id)
+            new Claim(JwtRegisteredClaimNames.Name, user.UserName),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(JwtRegisteredClaimNames.Jti, user.Id)
         };
 
         var token = new JwtSecurityToken(
-            issuer: "ad", 
-            audience: "ad", 
+            issuer: "ad",
+            audience: "ad",
             claims: claims,
             expires: DateTime.UtcNow.AddDays(7),
-            signingCredentials:credentials);
+            signingCredentials: credentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }

@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using RetailManager.DTO.Auth;
 using RetailManager.Interfaces;
 
-
 [Route("api/[controller]")]
 [ApiController]
 public class AuthController : ControllerBase
@@ -13,10 +12,10 @@ public class AuthController : ControllerBase
     {
         _authService = authService;
     }
-    
+
     // POST: api/Auth
     [HttpPost("register")]
-    public async Task<IActionResult> RegisterAsync([FromBody] RegisterDTO model)
+    public async Task<IActionResult> RegisterAsync([FromBody] RegisterDto model)
     {
         try
         {
@@ -30,7 +29,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> LoginAsync(LoginDTO model)
+    public async Task<IActionResult> LoginAsync(LoginDto model)
     {
         try
         {
