@@ -69,7 +69,7 @@ namespace RetailManager.Controllers
         [HttpPost]
         public async Task<ActionResult<Sale>> PostSale(SaleDto model)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var sale = new Sale
             {
                 SubTotal = model.SubTotal,
@@ -79,10 +79,11 @@ namespace RetailManager.Controllers
             };
 
             _context.Sales.Add(sale);
+
             foreach (var item in model.Cart)
             {
                 var product = await _context.Products.FindAsync(item.ProductId);
-                if (product == null)
+                if (product == null || product.QuantityInStock < item.Quantity)
                 {
                     return BadRequest();
                 }
@@ -95,8 +96,8 @@ namespace RetailManager.Controllers
                     PurchasePrice = price,
                     Tax = product.IsTaxable ? tax : 0,
                     Quantity = item.Quantity,
-                    SaleId = sale.Id,
                     ProductId = product.Id,
+                    Sale = sale,
                 };
 
                 product.QuantityInStock -= item.Quantity;
