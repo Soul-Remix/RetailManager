@@ -25,6 +25,12 @@ namespace RetailManager.Data
                 eb.Property(p => p.UpdatedAt).HasDefaultValueSql("timezone('utc', now())");
             });
 
+            builder.Entity<Account>(eb =>
+            {
+                eb.Property(p => p.CreatedAt).HasDefaultValueSql("timezone('utc', now())");
+                eb.Property(p => p.UpdatedAt).HasDefaultValueSql("timezone('utc', now())");
+            });
+
             builder.Entity<Inventory>(eb =>
             {
                 eb.Property(p => p.PurchaseDate).HasDefaultValueSql("timezone('utc', now())");

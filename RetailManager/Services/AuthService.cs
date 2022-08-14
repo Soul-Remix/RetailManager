@@ -2,8 +2,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using RetailManager.Data;
 using RetailManager.DTO.Auth;
 using RetailManager.Interfaces;
+using RetailManager.Models;
 using RetailManager.ViewModels.Auth;
 
 namespace RetailManager.Services;
@@ -12,12 +14,15 @@ public class AuthService : IAuthService
 {
     private readonly UserManager<IdentityUser> _userManager;
     private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly AppDbContext _context;
 
     public AuthService(UserManager<IdentityUser> userManager,
-        SignInManager<IdentityUser> signInManager)
+        SignInManager<IdentityUser> signInManager,
+        AppDbContext context)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _context = context;
     }
 
     public async Task RegisterUserAsync(RegisterDto model)
@@ -34,6 +39,16 @@ public class AuthService : IAuthService
         {
             throw new Exception("Failed to create user account");
         }
+
+        var account = new Account
+        {
+            Id = user.Id,
+            FirstName = "",
+            LastName = "",
+            Email = user.Email,
+        };
+        _context.Accounts.Add(account);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<LoginResponse> LoginUserAsync(LoginDto model)
