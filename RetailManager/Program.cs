@@ -10,7 +10,7 @@ using RetailManager.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("sqlLite")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Postgre")));
 
 // Register Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>

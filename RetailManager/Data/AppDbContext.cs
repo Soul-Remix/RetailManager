@@ -6,11 +6,11 @@ namespace RetailManager.Data
 {
     public class AppDbContext : IdentityDbContext
     {
-        public AppDbContext (DbContextOptions<AppDbContext> options)
+        public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
         }
-        
+
         public DbSet<Product> Products { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
@@ -21,19 +21,16 @@ namespace RetailManager.Data
         {
             builder.Entity<Product>(eb =>
             {
-                eb.Property(p => p.CreatedAt).HasDefaultValueSql("getutcdate()");
-                eb.Property(p => p.UpdatedAt).HasDefaultValueSql("getutcdate()");
+                eb.Property(p => p.CreatedAt).HasDefaultValueSql("timezone('utc', now())");
+                eb.Property(p => p.UpdatedAt).HasDefaultValueSql("timezone('utc', now())");
             });
-            
+
             builder.Entity<Inventory>(eb =>
             {
-                eb.Property(p => p.PurchaseDate).HasDefaultValueSql("getutcdate()");
+                eb.Property(p => p.PurchaseDate).HasDefaultValueSql("timezone('utc', now())");
             });
-            
-            builder.Entity<Sale>(eb =>
-            {
-                eb.Property(p => p.SaleDate).HasDefaultValueSql("getutcdate()");
-            });
+
+            builder.Entity<Sale>(eb => { eb.Property(p => p.SaleDate).HasDefaultValueSql("timezone('utc', now())"); });
             base.OnModelCreating(builder);
         }
     }

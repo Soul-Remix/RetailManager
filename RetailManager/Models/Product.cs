@@ -24,6 +24,6 @@ public class Product
 
     public bool IsTaxable { get; set; } = false;
 
-    [Column(TypeName = "datetime2")] public DateTime CreatedAt { get; set; }
-    [Column(TypeName = "datetime2")] public DateTime UpdatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }

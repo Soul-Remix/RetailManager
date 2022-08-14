@@ -10,10 +10,11 @@ namespace RetailManager.Services;
 
 public class AuthService : IAuthService
 {
-    private UserManager<IdentityUser> _userManager;
-    private SignInManager<IdentityUser> _signInManager;
+    private readonly UserManager<IdentityUser> _userManager;
+    private readonly SignInManager<IdentityUser> _signInManager;
 
-    public AuthService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+    public AuthService(UserManager<IdentityUser> userManager,
+        SignInManager<IdentityUser> signInManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -44,6 +45,8 @@ public class AuthService : IAuthService
             throw new Exception("User not found");
         }
 
+        var roles = await _userManager.GetRolesAsync(user);
+
         var signin = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
 
         if (!signin.Succeeded)
@@ -51,26 +54,35 @@ public class AuthService : IAuthService
             throw new Exception("Failed to login");
         }
 
-        var token = CreateJwt(user);
+        var token = CreateJwt(user, roles);
         return new LoginResponse
         {
             Token = token,
             ExpiryDate = DateTime.Now.AddDays(7),
-            ExpiresIn = 1660673038
+            ExpiresIn = 604800,
         };
     }
 
-    private static string CreateJwt(IdentityUser user)
+    private static string CreateJwt(IdentityUser user, IList<string>? roles)
     {
         var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("this is my secret"));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var claims = new[]
+        var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Name, user.UserName),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(JwtRegisteredClaimNames.Jti, user.Id)
+            new(ClaimTypes.Name, user.UserName),
+            new(ClaimTypes.NameIdentifier, user.Id),
+            new(JwtRegisteredClaimNames.Jti, user.Id)
         };
+        if (roles != null)
+        {
+            foreach (var role in roles)
+            {
+                claims.Add(
+                    new Claim(ClaimTypes.Role, role)
+                );
+            }
+        }
 
         var token = new JwtSecurityToken(
             issuer: "ad",
