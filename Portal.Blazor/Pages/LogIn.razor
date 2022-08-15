@@ -1,0 +1,55 @@
+@inject IAuthenticationService AuthService
+@page "/Login"
+
+<h3>Log In</h3>
+
+@if (showAuthError)
+{
+    <div class="alert alert-danger" role="alert">
+        <p>
+            @authError
+        </p>
+    </div>
+}
+<EditForm Model="model" OnValidSubmit="ExecuteLogIn" class="card card-body bg-light mt-5">
+    <DataAnnotationsValidator/>
+
+    <div class="form-group row mb-4">
+        <label for="email" class="col-md-2 col-form-label">Email:</label>
+        <div class="col-md-10">
+            <input id="email" class="form-control" @bind="model.Email"/>
+            <ValidationMessage For="() => model.Email"/>
+        </div>
+    </div>
+    <div class="form-group row mb-4">
+        <label for="password" class="col-md-2 col-form-label">Password:</label>
+        <div class="col-md-10">
+            <input id="password" type="password" class="form-control" @bind="model.Password"/>
+            <ValidationMessage For="() => model.Password"/>
+        </div>
+    </div>
+    <button class="btn btn-primary auto mx-auto">Log In</button>
+</EditForm>
+
+@code {
+    private AuthenticationUserModel model = new();
+    private bool showAuthError = false;
+    private string authError = "";
+
+    private async Task ExecuteLogIn()
+    {
+        showAuthError = false;
+
+        var result = await AuthService.LogIn(model);
+
+        if (result != null)
+        {
+        }
+        else
+        {
+            authError = "Error logging in please try again";
+            showAuthError = true;
+        }
+    }
+
+}

@@ -1,4 +1,4 @@
-using Portal.Blazor.Models;
+using Portal.Blazor.Authentication.Models;
 
 namespace Portal.Blazor.Authentication.Interfaces;
 

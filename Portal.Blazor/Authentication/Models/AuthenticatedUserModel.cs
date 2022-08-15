@@ -1,4 +1,4 @@
-namespace Portal.Blazor.Models;
+namespace Portal.Blazor.Authentication.Models;
 
 public class AuthenticatedUserModel
 {

@@ -3,7 +3,7 @@ using System.Text.Json;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Portal.Blazor.Authentication.Interfaces;
-using Portal.Blazor.Models;
+using Portal.Blazor.Authentication.Models;
 
 namespace Portal.Blazor.Authentication.Services;
 
@@ -31,10 +31,12 @@ public class AuthenticationService : IAuthenticationService
         });
 
         var result = await _httpClient.PostAsync(
-            "/auth/login",
+            "api/auth/login",
             data
         );
         var resultContent = await result.Content.ReadAsStreamAsync();
+
+        Console.WriteLine(result.IsSuccessStatusCode);
 
         if (!result.IsSuccessStatusCode)
         {
