@@ -12,7 +12,7 @@ namespace RetailManager.Data
         }
 
         public DbSet<Product> Products { get; set; }
-        public DbSet<Account> Accounts { get; set; }
+        public DbSet<Profile> Accounts { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Sale> Sales { get; set; }
         public DbSet<SaleDetail> SaleDetails { get; set; }
@@ -25,7 +25,7 @@ namespace RetailManager.Data
                 eb.Property(p => p.UpdatedAt).HasDefaultValueSql("timezone('utc', now())");
             });
 
-            builder.Entity<Account>(eb =>
+            builder.Entity<Profile>(eb =>
             {
                 eb.Property(p => p.CreatedAt).HasDefaultValueSql("timezone('utc', now())");
                 eb.Property(p => p.UpdatedAt).HasDefaultValueSql("timezone('utc', now())");

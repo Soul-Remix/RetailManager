@@ -23,8 +23,8 @@ public class Sale
     public decimal Total { get; set; }
 
     [StringLength(128)]
-    [ForeignKey("Account")]
+    [ForeignKey("Profile")]
     public string CashierId { get; set; }
 
-    public Account Account { get; set; }
+    public Profile Profile { get; set; }
 }

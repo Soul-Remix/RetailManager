@@ -40,7 +40,7 @@ public class AuthService : IAuthService
             throw new Exception("Failed to create user account");
         }
 
-        var account = new Account
+        var account = new Profile
         {
             Id = user.Id,
             FirstName = "",

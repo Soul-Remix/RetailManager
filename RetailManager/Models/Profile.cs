@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RetailManager.Models;
 
-[Table("Account")]
-public class Account
+[Table("Profile")]
+public class Profile
 {
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     [StringLength(128)]
