@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetailManager", "RetailManager\RetailManager.csproj", "{0D3C9522-0484-4AB5-8104-79BF9F8A2D9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protal.Blazor", "Protal.Blazor\Protal.Blazor.csproj", "{5C666269-F2C5-45AE-A1FD-9655EAB7101E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.Blazor", "Portal.Blazor\Portal.Blazor.csproj", "{5C666269-F2C5-45AE-A1FD-9655EAB7101E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
