@@ -12,7 +12,7 @@ namespace RetailManager.Data
         }
 
         public DbSet<Product> Products { get; set; }
-        public DbSet<Profile> Accounts { get; set; }
+        public DbSet<Profile> Profiles { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Sale> Sales { get; set; }
         public DbSet<SaleDetail> SaleDetails { get; set; }

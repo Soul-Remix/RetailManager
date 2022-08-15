@@ -42,7 +42,6 @@ namespace RetailManager.Controllers
         }
 
         // PUT: api/Sales/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSale(int id, Sale sale)
         {
@@ -65,7 +64,6 @@ namespace RetailManager.Controllers
         }
 
         // POST: api/Sales
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Sale>> PostSale(SaleDto model)
         {

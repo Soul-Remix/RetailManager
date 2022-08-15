@@ -47,7 +47,7 @@ public class AuthService : IAuthService
             LastName = "",
             Email = user.Email,
         };
-        _context.Accounts.Add(account);
+        _context.Profiles.Add(account);
         await _context.SaveChangesAsync();
     }
 

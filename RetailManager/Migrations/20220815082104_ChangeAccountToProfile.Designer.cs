@@ -12,8 +12,8 @@ using RetailManager.Data;
 namespace RetailManager.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220814102411_InitialNewDB")]
-    partial class InitialNewDB
+    [Migration("20220815082104_ChangeAccountToProfile")]
+    partial class ChangeAccountToProfile
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -220,37 +220,6 @@ namespace RetailManager.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("RetailManager.Models.Account", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Account");
-                });
-
             modelBuilder.Entity("RetailManager.Models.Inventory", b =>
                 {
                     b.Property<int>("Id")
@@ -320,6 +289,41 @@ namespace RetailManager.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Product");
+                });
+
+            modelBuilder.Entity("RetailManager.Models.Profile", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("timezone('utc', now())");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("timezone('utc', now())");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Profile");
                 });
 
             modelBuilder.Entity("RetailManager.Models.Sale", b =>
@@ -452,13 +456,13 @@ namespace RetailManager.Migrations
 
             modelBuilder.Entity("RetailManager.Models.Sale", b =>
                 {
-                    b.HasOne("RetailManager.Models.Account", "Account")
+                    b.HasOne("RetailManager.Models.Profile", "Cashier")
                         .WithMany()
                         .HasForeignKey("CashierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Account");
+                    b.Navigation("Cashier");
                 });
 
             modelBuilder.Entity("RetailManager.Models.SaleDetail", b =>

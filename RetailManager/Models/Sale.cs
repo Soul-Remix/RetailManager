@@ -26,5 +26,5 @@ public class Sale
     [ForeignKey("Profile")]
     public string CashierId { get; set; }
 
-    public Profile Profile { get; set; }
+    public Profile Cashier { get; set; }
 }
