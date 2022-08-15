@@ -21,9 +21,8 @@ public class Product
     public decimal RetailPrice { get; set; }
 
     public int QuantityInStock { get; set; } = 1;
-
     public bool IsTaxable { get; set; } = false;
-
+    public bool IsArchived { get; set; } = false;
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RetailManager.Data;
@@ -8,6 +9,7 @@ namespace RetailManager.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ProductsController : ControllerBase
 {
     private AppDbContext _context;
@@ -20,7 +22,8 @@ public class ProductsController : ControllerBase
     [HttpGet]
     public async Task<List<Product>> GetProducts()
     {
-        var products = await _context.Products.AsNoTracking().ToListAsync();
+        var products = await _context.Products.AsNoTracking()
+            .Where(p => p.IsArchived == false).ToListAsync();
         return products;
     }
 
@@ -45,9 +48,8 @@ public class ProductsController : ControllerBase
         product.Name = model.Name;
         product.RetailPrice = model.RetailPrice;
         product.QuantityInStock = model.QuantityInStock;
-        // Remove after switching to postgreSql
-        product.CreatedAt = DateTime.UtcNow;
-        product.UpdatedAt = DateTime.UtcNow;
+        product.IsTaxable = model.IsTaxable;
+        product.IsArchived = model.IsArchived;
 
         _context.Products.Add(product);
         await _context.SaveChangesAsync();
@@ -56,7 +58,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateProduct(ProductDto product, int id)
+    public async Task<IActionResult> UpdateProduct(int id, ProductDto product)
     {
         var productToUpdate = await _context.Products.FindAsync(id);
 
@@ -69,17 +71,26 @@ public class ProductsController : ControllerBase
         productToUpdate.Name = product.Name;
         productToUpdate.RetailPrice = product.RetailPrice;
         productToUpdate.QuantityInStock = product.QuantityInStock;
+        productToUpdate.IsTaxable = product.IsTaxable;
+        productToUpdate.IsArchived = product.IsArchived;
 
-        _context.Update(productToUpdate);
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
 
-        try
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteProduct(int id)
+    {
+        var product = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+
+        if (product == null)
         {
-            await _context.SaveChangesAsync();
-            return NoContent();
+            return NotFound();
         }
-        catch (Exception ex)
-        {
-            return BadRequest();
-        }
+
+        product.IsArchived = true;
+
+        await _context.SaveChangesAsync();
+        return NoContent();
     }
 }

@@ -13,5 +13,7 @@ public class ProductDto
     public string Description { get; set; }
 
     public decimal RetailPrice { get; set; }
-    public int QuantityInStock { get; set; } = 1;
+    public int QuantityInStock { get; set; }
+    public bool IsTaxable { get; set; }
+    public bool IsArchived { get; set; }
 }
