@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.Json;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -24,19 +25,17 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<AuthenticatedUserModel> LogIn(AuthenticationUserModel model)
     {
-        var data = new FormUrlEncodedContent(new[]
+        var data = new Dictionary<string, string>
         {
-            new KeyValuePair<string, string>("email", model.Email),
-            new KeyValuePair<string, string>("password", model.Password)
-        });
+            { "email", model.Email },
+            { "password", model.Password }
+        };
 
-        var result = await _httpClient.PostAsync(
+        var result = await _httpClient.PostAsJsonAsync(
             "api/auth/login",
             data
         );
         var resultContent = await result.Content.ReadAsStreamAsync();
-
-        Console.WriteLine(result.IsSuccessStatusCode);
 
         if (!result.IsSuccessStatusCode)
         {

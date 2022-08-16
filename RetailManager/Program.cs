@@ -85,6 +85,11 @@ builder.Services.AddSwaggerGen(options =>
     options.AddSecurityRequirement(securityRequirement);
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy => { policy.WithOrigins("https://localhost:7112").AllowAnyHeader(); });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -95,6 +100,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();

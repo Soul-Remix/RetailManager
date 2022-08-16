@@ -1,4 +1,5 @@
 @inject IAuthenticationService AuthService
+@inject NavigationManager NavManager
 @page "/Login"
 
 <h3>Log In</h3>
@@ -44,6 +45,7 @@
 
         if (result != null)
         {
+            NavManager.NavigateTo("/");
         }
         else
         {
