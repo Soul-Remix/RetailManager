@@ -1,6 +1,91 @@
+@inject IUserEndpoints UserEndpoints
+@inject NavigationManager NavManager
 @page "/Register"
-<h3>Register</h3>
+
+<h3>Create an account</h3>
+
+@if (_showErrorMessage)
+{
+    <div class="alert alert-danger" role="alert">
+        @_errorMessage
+    </div>
+}
+
+<EditForm Model="_model" OnValidSubmit="ExecuteRegister" class="card card-body bg-light mt-5">
+    <DataAnnotationsValidator/>
+
+    <div class="form-group row mb-4">
+        <label for="email" class="col-md-2 col-form-label">Email:</label>
+        <div class="col-md-10">
+            <input id="email" class="form-control" @bind="_model.Email"/>
+            <ValidationMessage For="() => _model.Email"/>
+        </div>
+    </div>
+    <div class="form-group row mb-4">
+        <label for="firstName" class="col-md-2 col-form-label">First Name:</label>
+        <div class="col-md-10">
+            <input id="firstName" class="form-control" @bind="_model.FirstName"/>
+            <ValidationMessage For="() => _model.FirstName"/>
+        </div>
+    </div>
+    <div class="form-group row mb-4">
+        <label for="lastName" class="col-md-2 col-form-label">Last Name:</label>
+        <div class="col-md-10">
+            <input id="lastName" class="form-control" @bind="_model.LastName"/>
+            <ValidationMessage For="() => _model.LastName"/>
+        </div>
+    </div>
+    <div class="form-group row mb-4">
+        <label for="password" class="col-md-2 col-form-label">Password:</label>
+        <div class="col-md-10">
+            <input id="password" type="password" class="form-control" @bind="_model.Password"/>
+            <ValidationMessage For="() => _model.Password"/>
+        </div>
+    </div>
+    <div class="form-group row mb-4">
+        <label for="confPassword" class="col-md-2 col-form-label">Confirm Password:</label>
+        <div class="col-md-10">
+            <input id="confPassword" type="password" class="form-control" @bind="_model.ConfirmPassword"/>
+            <ValidationMessage For="() => _model.ConfirmPassword"/>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        @if (_isLoading)
+        {
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        }
+        else
+        {
+            <button class="btn btn-success">Register</button>
+        }
+    </div>
+</EditForm>
 
 @code {
+    private RegisterDto _model = new();
+    private bool _showErrorMessage;
+    private string _errorMessage = "";
+    private bool _isLoading;
+
+    private async Task ExecuteRegister()
+    {
+        _showErrorMessage = false;
+        _isLoading = true;
+
+        try
+        {
+            await UserEndpoints.CreateUser(_model);
+            _isLoading = false;
+            NavManager.NavigateTo("/login");
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+            _isLoading = false;
+            _showErrorMessage = true;
+        }
+    }
 
 }
