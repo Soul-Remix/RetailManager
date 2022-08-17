@@ -13,14 +13,17 @@ public class AuthenticationService : IAuthenticationService
     private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
     private readonly AuthenticationStateProvider _authProvider;
+    private readonly IConfiguration _config;
 
     public AuthenticationService(HttpClient httpClient,
         ILocalStorageService localStorage,
-        AuthenticationStateProvider authProvider)
+        AuthenticationStateProvider authProvider,
+        IConfiguration config)
     {
         _httpClient = httpClient;
         _localStorage = localStorage;
         _authProvider = authProvider;
+        _config = config;
     }
 
     public async Task<AuthenticatedUserModel> LogIn(AuthenticationUserModel model)
@@ -32,7 +35,7 @@ public class AuthenticationService : IAuthenticationService
         };
 
         var result = await _httpClient.PostAsJsonAsync(
-            "api/auth/login",
+            _config["endpoints:login"],
             data
         );
         var resultContent = await result.Content.ReadAsStreamAsync();
@@ -45,7 +48,7 @@ public class AuthenticationService : IAuthenticationService
         var resultData = await JsonSerializer.DeserializeAsync<AuthenticatedUserModel>(resultContent,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-        await _localStorage.SetItemAsync("token", resultData.Token);
+        await _localStorage.SetItemAsync(_config["token"], resultData.Token);
 
         ((AuthStateProvider)_authProvider).NotifyUserAuth(resultData.Token);
 
@@ -56,7 +59,7 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task Logout()
     {
-        await _localStorage.RemoveItemAsync("token");
+        await _localStorage.RemoveItemAsync(_config["token"]);
         ((AuthStateProvider)_authProvider).NotifyUserLogout();
         _httpClient.DefaultRequestHeaders.Authorization = null;
     }

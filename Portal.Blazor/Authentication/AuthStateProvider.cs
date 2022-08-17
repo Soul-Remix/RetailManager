@@ -9,18 +9,20 @@ public class AuthStateProvider : AuthenticationStateProvider
 {
     private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
+    private readonly IConfiguration _config;
     private readonly AuthenticationState _anonymous;
 
-    public AuthStateProvider(HttpClient httpClient, ILocalStorageService localStorage)
+    public AuthStateProvider(HttpClient httpClient, ILocalStorageService localStorage, IConfiguration config)
     {
         _httpClient = httpClient;
         _localStorage = localStorage;
+        _config = config;
         _anonymous = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
     }
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        var token = await _localStorage.GetItemAsync<string>("token");
+        var token = await _localStorage.GetItemAsync<string>(_config["token"]);
 
         if (string.IsNullOrWhiteSpace(token))
         {
