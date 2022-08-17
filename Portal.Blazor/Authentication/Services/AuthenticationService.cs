@@ -4,7 +4,8 @@ using System.Text.Json;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Portal.Blazor.Authentication.Interfaces;
-using Portal.Blazor.Authentication.Models;
+using TypesLibrary.Shared.Dto;
+using TypesLibrary.Shared.Models;
 
 namespace Portal.Blazor.Authentication.Services;
 
@@ -26,7 +27,7 @@ public class AuthenticationService : IAuthenticationService
         _config = config;
     }
 
-    public async Task<AuthenticatedUserModel> LogIn(AuthenticationUserModel model)
+    public async Task<LoginResponse> LogIn(LoginDto model)
     {
         var data = new Dictionary<string, string>
         {
@@ -45,7 +46,7 @@ public class AuthenticationService : IAuthenticationService
             return null;
         }
 
-        var resultData = await JsonSerializer.DeserializeAsync<AuthenticatedUserModel>(resultContent,
+        var resultData = await JsonSerializer.DeserializeAsync<LoginResponse>(resultContent,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         await _localStorage.SetItemAsync(_config["token"], resultData.Token);

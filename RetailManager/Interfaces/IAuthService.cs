@@ -1,5 +1,5 @@
-using RetailManager.DTO.Auth;
-using RetailManager.ViewModels.Auth;
+using TypesLibrary.Shared.Dto;
+using TypesLibrary.Shared.Models;
 
 namespace RetailManager.Interfaces;
 

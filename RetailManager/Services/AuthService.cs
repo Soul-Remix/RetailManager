@@ -3,10 +3,10 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using RetailManager.Data;
-using RetailManager.DTO.Auth;
 using RetailManager.Interfaces;
 using RetailManager.Models;
-using RetailManager.ViewModels.Auth;
+using TypesLibrary.Shared.Dto;
+using TypesLibrary.Shared.Models;
 
 namespace RetailManager.Services;
 
@@ -43,12 +43,20 @@ public class AuthService : IAuthService
         var account = new Profile
         {
             Id = user.Id,
-            FirstName = "",
-            LastName = "",
+            FirstName = model.FirstName,
+            LastName = model.LastName,
             Email = user.Email,
         };
         _context.Profiles.Add(account);
-        await _context.SaveChangesAsync();
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch
+        {
+            await _userManager.DeleteAsync(user);
+            throw new Exception("Failed to create user account");
+        }
     }
 
     public async Task<LoginResponse> LoginUserAsync(LoginDto model)

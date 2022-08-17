@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace RetailManager.DTO.Auth;
+namespace TypesLibrary.Shared.Dto;
 
 public class LoginDto
 {

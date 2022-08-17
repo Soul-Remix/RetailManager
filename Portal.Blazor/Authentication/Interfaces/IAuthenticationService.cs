@@ -1,9 +1,10 @@
-using Portal.Blazor.Authentication.Models;
+using TypesLibrary.Shared.Dto;
+using TypesLibrary.Shared.Models;
 
 namespace Portal.Blazor.Authentication.Interfaces;
 
 public interface IAuthenticationService
 {
-    Task<AuthenticatedUserModel> LogIn(AuthenticationUserModel model);
+    Task<LoginResponse> LogIn(LoginDto model);
     Task Logout();
 }

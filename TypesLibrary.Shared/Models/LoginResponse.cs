@@ -1,4 +1,4 @@
-namespace RetailManager.ViewModels.Auth;
+namespace TypesLibrary.Shared.Models;
 
 public class LoginResponse
 {

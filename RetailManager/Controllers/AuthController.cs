@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using RetailManager.DTO.Auth;
 using RetailManager.Interfaces;
+using TypesLibrary.Shared.Dto;
 
 [Route("api/[controller]")]
 [ApiController]
