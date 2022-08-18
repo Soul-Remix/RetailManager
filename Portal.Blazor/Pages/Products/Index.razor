@@ -1,0 +1,59 @@
+@page "/Products"
+@inject IProductsEndpoint ProductEndpoints
+<PageTitle>Products</PageTitle>
+
+<h3>Products</h3>
+
+@if (_showError)
+{
+    <div class="alert-danger p-3">
+        <p>@_errorMessage</p>
+    </div>
+}
+
+@if (_isLoading)
+{
+    <div class="w-100 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+}
+
+@if (!_isLoading && ProductsList != null)
+{
+    <div class="container-fluid">
+        <div class="row">
+            @foreach (var product in ProductsList)
+            {
+                <Product product="@product"/>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private bool _isLoading;
+    private bool _showError;
+    private string _errorMessage;
+    private List<ProductModel> ProductsList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isLoading = true;
+        _showError = false;
+
+        try
+        {
+            ProductsList = await ProductEndpoints.GetAll();
+            _isLoading = false;
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+            _isLoading = false;
+            _showError = true;
+        }
+    }
+
+}

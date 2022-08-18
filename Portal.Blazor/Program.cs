@@ -18,6 +18,7 @@ builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 builder.Services.AddScoped<IUserEndpoints, UsersEndpoint>();
+builder.Services.AddScoped<IProductsEndpoint, ProductsEndpoint>();
 
 builder.Services.AddScoped(sp => new HttpClient
     { BaseAddress = new Uri(builder.Configuration.GetValue<string>("baseUrl")) });
