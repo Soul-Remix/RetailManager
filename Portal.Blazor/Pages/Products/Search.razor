@@ -1,24 +1,24 @@
-@page "/Products"
+@page "/products/search/{searchQuery}"
 @inject IProductsEndpoint ProductEndpoints
 @inject NavigationManager NavManager
-<PageTitle>Products</PageTitle>
+<PageTitle>Search</PageTitle>
 
 <ErrorAlert ShowAlert="@_showError" ErrorMessage="@_errorMessage"/>
 
 <LoadingSpinner IsLoading="@_isLoading"/>
 
-@if (!_isLoading && ProductsList != null)
+@if (!_isLoading && ProductsList != null && ProductsList.Count == 0)
+{
+    <div class="alert">
+        <p class="m-0">no search results found.</p>
+    </div>
+}
+
+@if (!_isLoading && ProductsList != null && ProductsList.Count > 0)
 {
     <div class="container-fluid">
-        <h3>Products</h3>
+        <h3>Search Products</h3>
         <div class="row">
-            <form method="get" @onsubmit="@ExecuteSearch">
-                <div class="form-actions no-color mb-4">
-                    <label for="search">Search Products: </label>
-                    <input type="text" name="search" id="search" @bind="search"/>
-                    <button class="btn btn-outline-primary" type="submit">Search</button>
-                </div>
-            </form>
             @foreach (var product in ProductsList)
             {
                 <ProductCard product="@product"/>
@@ -27,6 +27,7 @@
     </div>
 }
 
+
 @code {
     private bool _isLoading;
     private bool _showError;
@@ -34,7 +35,7 @@
     private List<ProductModel> ProductsList;
 
     [Parameter]
-    public string search { get; set; } = "";
+    public string SearchQuery { get; set; } = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -43,7 +44,7 @@
 
         try
         {
-            ProductsList = await ProductEndpoints.GetAll();
+            ProductsList = await ProductEndpoints.GetAll(SearchQuery);
             _isLoading = false;
         }
         catch (Exception ex)
@@ -56,7 +57,7 @@
 
     private void ExecuteSearch()
     {
-        NavManager.NavigateTo($"products/search/{search}");
+        NavManager.NavigateTo($"products/search/{SearchQuery}");
     }
 
 }

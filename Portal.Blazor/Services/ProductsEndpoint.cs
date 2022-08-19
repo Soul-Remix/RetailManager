@@ -20,12 +20,12 @@ public class ProductsEndpoint : IProductsEndpoint
         _localStorage = localStorage;
     }
 
-    public async Task<List<ProductModel>> GetAll()
+    public async Task<List<ProductModel>> GetAll(string searchQuery = "")
     {
         var token = await _localStorage.GetItemAsync<string>(_config["token"]);
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
 
-        var result = await _client.GetAsync(_config["endpoints:products"]);
+        var result = await _client.GetAsync($"{_config["endpoints:products"]}?search={searchQuery}");
 
         if (!result.IsSuccessStatusCode)
         {

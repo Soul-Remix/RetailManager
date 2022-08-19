@@ -20,11 +20,19 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<List<Product>> GetProducts()
+    public async Task<List<Product>> GetProducts(string? search)
     {
-        var products = await _context.Products.AsNoTracking()
-            .Where(p => p.IsArchived == false).ToListAsync();
-        return products;
+        var products = _context.Products.AsNoTracking()
+            .Where(p => p.IsArchived == false);
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            products = products.Where(p => p.Name.Contains(search));
+        }
+
+        var result = await products.ToListAsync();
+
+        return result;
     }
 
     [HttpGet("{id}")]
