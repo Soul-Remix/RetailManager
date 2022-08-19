@@ -1,0 +1,115 @@
+@page "/products/edit/{id:int}"
+@inject IProductsEndpoint ProductEndpoints
+@inject NavigationManager NavManager
+<PageTitle>Edit product</PageTitle>
+
+<h3>Edit Product</h3>
+
+<ErrorAlert ShowAlert="@_showError" ErrorMessage="@_errorMessage"/>
+
+<LoadingSpinner IsLoading="@_isLoadingPage"/>
+
+@if (!_isLoadingPage && _model != null)
+{
+    <EditForm Model="_model" OnValidSubmit="ExecuteUpdate" class="card card-body bg-light mt-5">
+        <DataAnnotationsValidator/>
+        <div class="form-group row mb-4">
+            <label for="name" class="col-md-2 col-form-label">Product Name:</label>
+            <div class="col-md-10">
+                <input id="name" class="form-control" @bind="_model.Name"/>
+                <ValidationMessage For="() => _model.Name"/>
+            </div>
+        </div>
+        <div class="form-group row mb-4">
+            <label for="description" class="col-md-2 col-form-label">Description:</label>
+            <div class="col-md-10">
+                <textarea id="description"  class="form-control" @bind="_model.Description"></textarea>
+                <ValidationMessage For="() => _model.Description"/>
+            </div>
+        </div>
+        <div class="form-group row mb-4">
+            <label for="price" class="col-md-2 col-form-label">Retail price:</label>
+            <div class="col-md-10">
+                <input id="price" class="form-control" @bind="_model.RetailPrice" type="number" step="any"/>
+                <ValidationMessage For="() => _model.RetailPrice"/>
+            </div>
+        </div>
+        <div class="form-group row mb-4">
+            <label for="quantity" class="col-md-2 col-form-label">Quantity:</label>
+            <div class="col-md-10">
+                <input id="quantity" class="form-control" type="number" @bind="_model.QuantityInStock"/>
+                <ValidationMessage For="() => _model.QuantityInStock"/>
+            </div>
+        </div>
+        <div class="form-group mb-4 d-flex align-items-center gap-4">
+            <label for="taxable" class="col-form-label">Is Taxable:</label>
+            <div >
+                <input id="taxable" class="form-check" type="checkbox" @bind="_model.IsTaxable"/>
+                <ValidationMessage For="() => _model.IsTaxable"/>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            @if (_isLoading)
+            {
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            }
+            else
+            {
+                <button class="btn btn-success">Update</button>
+            }
+        </div>
+    </EditForm>
+}
+
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private ProductModel _model;
+    private bool _isLoadingPage;
+    private bool _isLoading;
+    private bool _showError;
+    private string _errorMessage = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isLoadingPage = true;
+        _showError = false;
+
+        try
+        {
+            _model = await ProductEndpoints.GetDetail(Id);
+            _isLoadingPage = false;
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+            _isLoadingPage = false;
+            _showError = true;
+        }
+    }
+
+    private async Task ExecuteUpdate()
+    {
+        _isLoading = true;
+        _showError = false;
+
+        try
+        {
+            await ProductEndpoints.Update(_model);
+            _isLoading = false;
+            NavManager.NavigateTo($"products/detail/{_model.Id}");
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+            _isLoading = false;
+            _showError = true;
+        }
+    }
+
+}

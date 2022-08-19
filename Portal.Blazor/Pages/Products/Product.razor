@@ -1,0 +1,89 @@
+@page "/Products/Detail/{id:int}"
+@inject IProductsEndpoint ProductEndpoints
+@inject NavigationManager NavManager
+@if (_product != null)
+{
+    <PageTitle>@_product.Name</PageTitle>
+}
+else
+{
+    <PageTitle>Product</PageTitle>
+}
+
+<h3>Product</h3>
+
+<ErrorAlert ShowAlert="@_showError" ErrorMessage="@_errorMessage"/>
+
+<LoadingSpinner IsLoading="@_isLoading"/>
+
+@if (!_isLoading && _product != null)
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="mb-3 d-md-flex justify-content-between gap-3 ">
+                <div class="col-12 col-md-6">
+                    <a href="products/detail/@_product.Id">
+                        <img src="https://dummyimage.com/1200x900/000/fff" class="img-fluid" alt="@_product.Description"/>
+                    </a>
+                </div>
+                <div class="col-12 col-md-6 d-flex flex-column justify-content-center mt-3">
+                    <p>
+                        @_product.Description
+                    </p>
+                    <p>
+                        <strong>Quantity: </strong> @_product.QuantityInStock
+                    </p>
+                    <p class="h5">@_product.Name</p>
+                    <p>Price: $@_product.RetailPrice</p>
+                    <p>Is Taxable: @_product.IsTaxable</p>
+                    <p>Is Archived: @_product.IsArchived</p>
+                    <p>Date Added: @_product.CreatedAt.Date</p>
+                </div>
+            </div>
+            <div>
+                <button class="btn btn-primary" role="navigation" @onclick="OnClickEdit">Edit</button>
+                <button class="btn btn-danger mx-3" role="navigation" @onclick="OnClickDelete">Delete</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private bool _isLoading;
+    private bool _showError;
+    private string _errorMessage = "";
+    private ProductModel? _product;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isLoading = true;
+        _showError = false;
+
+        try
+        {
+            _product = await ProductEndpoints.GetDetail(Id);
+            _isLoading = false;
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+            _isLoading = false;
+            _showError = true;
+        }
+    }
+
+    private void OnClickEdit()
+    {
+        NavManager.NavigateTo($"products/edit/{_product.Id}");
+    }
+
+    private void OnClickDelete()
+    {
+        NavManager.NavigateTo($"products/delete/{_product.Id}");
+    }
+
+}

@@ -87,7 +87,10 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy => { policy.WithOrigins("https://localhost:7112").AllowAnyHeader(); });
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("https://localhost:7112").AllowAnyHeader().AllowAnyMethod();
+    });
 });
 
 var app = builder.Build();

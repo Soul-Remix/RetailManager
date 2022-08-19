@@ -1,0 +1,16 @@
+@if (ShowAlert)
+{
+    <div class="alert-danger p-3 mb-3">
+        <p class="m-0">@ErrorMessage</p>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public bool ShowAlert { get; set; }
+
+    [Parameter]
+    public string ErrorMessage { get; set; }
+
+}

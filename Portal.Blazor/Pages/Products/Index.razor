@@ -4,21 +4,10 @@
 
 <h3>Products</h3>
 
-@if (_showError)
-{
-    <div class="alert-danger p-3">
-        <p>@_errorMessage</p>
-    </div>
-}
 
-@if (_isLoading)
-{
-    <div class="w-100 d-flex align-items-center justify-content-center">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-    </div>
-}
+<ErrorAlert ShowAlert="@_showError" ErrorMessage="@_errorMessage"/>
+
+<LoadingSpinner IsLoading="@_isLoading"/>
 
 @if (!_isLoading && ProductsList != null)
 {
@@ -26,7 +15,7 @@
         <div class="row">
             @foreach (var product in ProductsList)
             {
-                <Product product="@product"/>
+                <ProductCard product="@product"/>
             }
         </div>
     </div>
