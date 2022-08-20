@@ -1,6 +1,6 @@
 @inject IUserEndpoints UsersEndpoints
 @inject NavigationManager NavManager
-@page "/Products/Detail/{id}"
+@page "/users/details/{id}"
 @if (_user != null)
 {
     <PageTitle>@_user.FirstName</PageTitle>
@@ -21,34 +21,34 @@ else
             <h3>User</h3>
             <hr/>
             <dl class="row">
-            <dt class="col-sm-2">
+            <dt class="col-sm-4 col-lg-2">
                First Name
             </dt>
-            <dd class="col-sm-10">
+            <dd class="col-sm-8 col-lg-10">
             @_user.FirstName
             </dd>
-            <dt class="col-sm-2">
+            <dt class="col-sm-4 col-lg-2">
                Last Name
             </dt>
-            <dd class="col-sm-10">
+            <dd class="col-sm-8 col-lg-10">
                 @_user.LastName
             </dd>
-            <dt class="col-sm-2">
+            <dt class="col-sm-4 col-lg-2">
                 Email
             </dt>
-            <dd class="col-sm-10">
+            <dd class="col-sm-8 col-lg-10">
                 @_user.Email
             </dd>
-            <dt class="col-sm-2">
+            <dt class="col-sm-4 col-lg-2">
                 Date Joined
             </dt>
-            <dd class="col-sm-10">
+            <dd class="col-sm-8 col-lg-10">
                 @_user.CreatedAt
             </dd>
-            <dt class="col-sm-2">
+            <dt class="col-sm-4 col-lg-2">
                 Roles
             </dt>
-            <dd class="col-sm-10">
+            <dd class="col-sm-8 col-lg-10">
                 @_user.Roles
             </dd>
          </dl>

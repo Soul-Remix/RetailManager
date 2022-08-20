@@ -16,13 +16,6 @@
     <DataAnnotationsValidator/>
 
     <div class="form-group row mb-4">
-        <label for="email" class="col-md-2 col-form-label">Email:</label>
-        <div class="col-md-10">
-            <input id="email" class="form-control" @bind="_user.Email"/>
-            <ValidationMessage For="() => _user.Email"/>
-        </div>
-    </div>
-    <div class="form-group row mb-4">
         <label for="firstName" class="col-md-2 col-form-label">First Name:</label>
         <div class="col-md-10">
             <input id="firstName" class="form-control" @bind="_user.FirstName"/>
@@ -45,7 +38,7 @@
         }
         else
         {
-            <button class="btn btn-success">Register</button>
+            <button class="btn btn-success">Edit user</button>
         }
     </div>
 </EditForm>
@@ -89,7 +82,7 @@
         {
             await UserEndpoints.Update(_user);
             _isLoading = false;
-            NavManager.NavigateTo($"/users/detail/{_user.Id}");
+            NavManager.NavigateTo($"/users/details/{_user.Id}");
         }
         catch (Exception ex)
         {

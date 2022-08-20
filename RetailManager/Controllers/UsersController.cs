@@ -22,11 +22,23 @@ public class UsersController : ControllerBase
 
     // GET: api/users/profile
     [HttpGet("profile")]
-    public async Task<ActionResult<Profile>> GetUserDetails()
+    public async Task<ActionResult<Profile>> GetMyProfile()
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         var user = await _context.Profiles.FindAsync(userId);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        return user;
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Profile>> GetUserProfile(string id)
+    {
+        var user = await _context.Profiles.FindAsync(id);
         if (user == null)
         {
             return NotFound();
@@ -58,6 +70,27 @@ public class UsersController : ControllerBase
         await _context.SaveChangesAsync();
         return NoContent();
     }
+
+    // // Delete: api/users/id
+    // [HttpDelete("{id}")]
+    // public async Task<IActionResult> DeleteProfile(string id)
+    // {
+    //     var loggedInUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+    //     if (!User.IsInRole("Admin") && loggedInUserId != id)
+    //     {
+    //         return BadRequest();
+    //     }
+
+    //     var userToDelete = await _context.Profiles.FindAsync(id);
+    //     if (userToDelete == null)
+    //     {
+    //         return NotFound();
+    //     }
+
+    //     await _context.SaveChangesAsync();
+    //     return NoContent();
+    // }
 
     // Admin Routes
 
