@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using Portal.Blazor.Interfaces;
 using TypesLibrary.Shared.Dto;
+using TypesLibrary.Shared.Models;
 
 namespace Portal.Blazor.Services;
 
@@ -15,7 +16,16 @@ public class UsersEndpoint : IUserEndpoints
         _config = config;
     }
 
-    public async Task CreateUser(RegisterDto model)
+    public Task<List<UserModel>> GetAll(string searchQuery = "")
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<UserModel> GetDetail(string id)
+    {
+        throw new NotImplementedException();
+    }
+    public async Task Create(RegisterDto model)
     {
         var result = await _httpClient.PostAsJsonAsync(_config["endpoints:register"], model);
 
@@ -23,5 +33,14 @@ public class UsersEndpoint : IUserEndpoints
         {
             throw new Exception(result.ReasonPhrase);
         }
+    }
+
+    public Task Update(UserModel model)
+    {
+        throw new NotImplementedException();
+    }
+    public Task Delete(string id)
+    {
+        throw new NotImplementedException();
     }
 }

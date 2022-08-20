@@ -1,0 +1,85 @@
+@page "/users"
+@inject IUserEndpoints UserEndpoints
+@inject NavigationManager NavManager
+<PageTitle>Users</PageTitle>
+
+<ErrorAlert ShowAlert="@_showError" ErrorMessage="@_errorMessage"/>
+
+<LoadingSpinner IsLoading="@_isLoading"/>
+
+@if (!_isLoading && _usersList != null)
+{
+    <div class="container-fluid">
+        <h3>Users</h3>
+        <div class="row">
+            <form method="get" @onsubmit="@ExecuteSearch">
+                <div class="form-actions no-color mb-4">
+                    <label for="search">Search Users: </label>
+                    <input type="text" name="search" id="search" @bind="search"/>
+                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                </div>
+            </form>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Roles</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var user in _usersList)
+                {
+                    <tr>
+                        <td>@user.FirstName</td>
+                        <td>@user.LastName</td>
+                        <td>@user.Email</td>
+                        <td>@user.Roles</td>
+                        <td>
+                            <a href="">Edit</a> |
+                            <a href="">Details</a> |
+                            <a href="">Delete</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@code {
+    private bool _isLoading;
+    private bool _showError;
+    private string _errorMessage;
+    private List<UserModel> _usersList;
+
+    [Parameter]
+    public string search { get; set; } = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isLoading = true;
+        _showError = false;
+
+        try
+        {
+            _usersList = await UserEndpoints.GetAll();
+            _isLoading = false;
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+            _isLoading = false;
+            _showError = true;
+        }
+    }
+
+    private void ExecuteSearch()
+    {
+        NavManager.NavigateTo($"users/search/{search}");
+    }
+
+}

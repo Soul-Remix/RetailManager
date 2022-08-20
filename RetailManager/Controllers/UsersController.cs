@@ -63,7 +63,7 @@ public class UsersController : ControllerBase
 
     // GET: api/users
     [HttpGet]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public async Task<ActionResult<List<Profile>>> GetUsers()
     {
         var users = await _context.Profiles.AsNoTracking().ToListAsync();

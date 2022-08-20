@@ -21,6 +21,6 @@ builder.Services.AddScoped<IUserEndpoints, UsersEndpoint>();
 builder.Services.AddScoped<IProductsEndpoint, ProductsEndpoint>();
 
 builder.Services.AddScoped(sp => new HttpClient
-    { BaseAddress = new Uri(builder.Configuration.GetValue<string>("baseUrl")) });
+{ BaseAddress = new Uri(builder.Configuration.GetValue<string>("baseUrl")) });
 
 await builder.Build().RunAsync();

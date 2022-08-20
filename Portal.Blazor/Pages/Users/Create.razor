@@ -1,6 +1,7 @@
 @inject IUserEndpoints UserEndpoints
 @inject NavigationManager NavManager
-@page "/Register"
+@page "/users/create"
+<PageTitle>Create user account</PageTitle>
 
 <h3>Create an account</h3>
 
@@ -58,7 +59,7 @@
         }
         else
         {
-            <button class="btn btn-success">Register</button>
+            <button class="btn btn-success">Create</button>
         }
     </div>
 </EditForm>
@@ -78,7 +79,7 @@
         {
             await UserEndpoints.Create(_model);
             _isLoading = false;
-            NavManager.NavigateTo("/login");
+            NavManager.NavigateTo("/users");
         }
         catch (Exception ex)
         {
